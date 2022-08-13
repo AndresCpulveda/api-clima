@@ -40,7 +40,7 @@ window.addEventListener('load',() => {
 
   function consultarGeoCoding(ciudad, pais, apiKey) {
     mostrarSpinner();
-    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${ciudad},${pais}&appid=${apiKey}`
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${ciudad},${pais}&appid=${apiKey}`
     fetch(url)
       .then( respuesta => respuesta.json())
       .then( datos => {
