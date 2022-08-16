@@ -14,7 +14,7 @@ window.addEventListener('load',() => {
     //Validar
     const ciudad = document.querySelector('#ciudad').value;
     const pais = document.querySelector('#pais').value;
-    if(ciudad == '' || pais == '') {
+    if(ciudad == '' || pais == '') { //Validacion basica de campos vacios
       mostrarError('Todos los campos son obligatorios')
       return;
     }
@@ -38,29 +38,28 @@ window.addEventListener('load',() => {
     }
   }
 
-  function consultarGeoCoding(ciudad, pais, apiKey) {
+  function consultarGeoCoding(ciudad, pais, apiKey) { //Con los parametros de ciudad, pais y nuestra API key, podemos obtener geolocalización mediante una api
     mostrarSpinner();
-    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${ciudad},${pais}&appid=${apiKey}`
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${ciudad},${pais}&appid=${apiKey}` //Hacemos la consulta poniendo las variables correspondientes en la url
     fetch(url)
-      .then( respuesta => respuesta.json())
+      .then( respuesta => respuesta.json()) //Se extra el json de la respuesta de la API
       .then( datos => {
-        console.log(datos);
-        if(datos.length > 0) {
+        if(datos.length > 0) { //Valida si la API su arrojo un resultado
           const lat = datos[0].lat;
           const lon = datos[0].lon;
-          consultarClima(lat, lon, apiKey)
+          consultarClima(lat, lon, apiKey) //Con los resultados de la geolocalización podemos consultar el clima
         }else{
           mostrarError('La ciudad no fue encontrada')
         }
       });
   }
 
-  function consultarClima(lat, lon, apiKey) {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
+  function consultarClima(lat, lon, apiKey) { //Con los parametros de latitud y longitud consultados en la API de geolocalización podemos obtener el clima
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric` //Hacemos la consulta poniendo las variables correspondientes en la url
     fetch(url)
-    .then( respuesta => respuesta.json())
+    .then( respuesta => respuesta.json())//Se extra el json de la respuesta de la API
     .then( datos => {
-      if(datos.cod == 200) {
+      if(datos.cod == 200) { //Si el cod es 200 (osea codigo de exito en la consulta)
         mostrarClima(datos)
       }else{
         mostrarError('La ciudad no fue encontrada')
@@ -68,9 +67,10 @@ window.addEventListener('load',() => {
     });
   }
 
-  function mostrarClima(datos) {
+  function mostrarClima(datos) { //Toma los datos de la consulta y los muestra al usuario
     limpiarHTML()
-    const { main: {temp, temp_max, temp_min}} = datos;
+    const { main: {temp, temp_max, temp_min}} = datos; //Destructuring del objeto clima dentro del objeto datos (destructuring de destructuring)
+    //Scripting de los elementos que mostrarán los datos del clima al usuario
     const div = document.createElement('div');
     div.classList.add('text-center', 'text-white');
     const locacion = document.createElement('p')
@@ -96,7 +96,7 @@ window.addEventListener('load',() => {
     }
   }
 
-  function mostrarSpinner() {
+  function mostrarSpinner() { //Mediante el uso de clases y selectores de css extraidos de internet se muestra una animación de spinner
     limpiarHTML();
     const spinner = document.createElement('div');
     spinner.classList.add('sk-fading-circle');
